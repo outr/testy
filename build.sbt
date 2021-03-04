@@ -11,7 +11,7 @@ val scalaNativeVersions = scala2
 
 name := "testy"
 organization in ThisBuild := "com.outr"
-version in ThisBuild := "1.0.0"
+version in ThisBuild := "1.0.1-SNAPSHOT"
 scalaVersion in ThisBuild := scala213
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 javacOptions in ThisBuild ++= Seq("-source", "1.8", "-target", "1.8")
@@ -69,7 +69,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
         Nil
       } else {
         Seq(
-          "org.scala-lang.modules" %% "scala-collection-compat" % collectionCompatVersion
+          "org.scala-lang.modules" %% "scala-collection-compat" % collectionCompatVersion,
+          "org.scala-lang" % "scala-reflect" % scalaVersion.value
         )
       }
     ),

@@ -4,7 +4,7 @@ import munit.FunSuite
 
 import scala.language.implicitConversions
 
-trait Spec extends FunSuite {
+trait Spec extends FunSuite with SpecExtras {
   private var parts = List.empty[String]
 
   implicit class Buildable(s: String) {
@@ -18,6 +18,8 @@ trait Spec extends FunSuite {
       }
     }
 
+    def when(f: => Unit): Unit = block("when", f)
+
     def should(f: => Unit): Unit = block("should", f)
 
     def must(f: => Unit): Unit = block("must", f)
@@ -30,5 +32,11 @@ trait Spec extends FunSuite {
 
   implicit def t2Assertable[T](t: T): Assertable[T] = Assertable[T](t, this)
 
-  def be[T](expected: T): Assertion[T] = BeAssertion[T](expected, this)
+  def be[T](expected: T): Assertion[T] = EqualityAssertion[T](expected)
+
+  def startWith(prefix: String): Assertion[String] = StartsWithAssertion(prefix)
+
+  object be {
+    def >=[T: Ordering](than: T): Assertion[T] = GTEAssertion[T](than)
+  }
 }
