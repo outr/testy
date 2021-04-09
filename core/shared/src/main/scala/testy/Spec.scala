@@ -2,6 +2,7 @@ package testy
 
 import munit.FunSuite
 
+import scala.concurrent.Future
 import scala.language.implicitConversions
 
 trait Spec extends FunSuite with SpecExtras {
@@ -28,6 +29,11 @@ trait Spec extends FunSuite with SpecExtras {
       val name = (s :: parts).reverse.mkString(" ")
       test(name)(f)
     }
+
+    def async[A](f: => A)(implicit support: AsyncSupport[A]): Unit = {
+      val name = (s :: parts).reverse.mkString(" ")
+      test(name)(support(f))
+    }
   }
 
   implicit def t2Assertable[T](t: T): Assertable[T] = Assertable[T](t, this)
@@ -39,4 +45,8 @@ trait Spec extends FunSuite with SpecExtras {
   object be {
     def >=[T: Ordering](than: T): Assertion[T] = GTEAssertion[T](than)
   }
+}
+
+trait AsyncSupport[A] {
+  def apply(async: A): Future[Unit]
 }
