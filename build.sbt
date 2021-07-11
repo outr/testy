@@ -34,7 +34,7 @@ ThisBuild / developers := List(
 ThisBuild / testOptions += Tests.Argument("-oD")
 
 // Dependency versions
-val collectionCompatVersion: String = "2.4.4"
+val collectionCompatVersion: String = "2.5.0"
 val munitVersion: String = "0.7.26"
 
 // set source map paths from local directories to github path
